@@ -3,6 +3,11 @@ import {useEffect, useState} from 'react';
 function GamesApiCall() {
     const [gamesData, setGamesData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [show, setShow] = useState(false);
+    //const [count, setCount] = useState(0);
+    /*useEffect(() => {
+        fetchGames();
+    }, [])*/
 
     async function fetchGames(){
         try {
@@ -19,19 +24,27 @@ function GamesApiCall() {
         }
     }
     console.log(gamesData);
+    console.log(loading);
 
-    useEffect(() => { //fetching the products when the count has changed(button clicked)
+
+    function handleClick(){
         fetchGames();
-    }, [])
-
-    if (loading)
-    {
-        return <div>Loading Games data...</div>
+        setShow(true);
     }
+
+
 
     return (
         <div>
-
+            {<button onClick={handleClick}>GameData</button>}
+            {show && gamesData && gamesData.length ? gamesData.map((game, index) => 
+                (<>
+                    <div key={game.id}>{game.name}: 
+                        {game.ratings.map((rating) => (<div key={rating.id}>{rating.title}:
+                    {rating.percent}</div>))}
+                    </div>
+                    <div key={index}>------------------------</div></>))
+                : null}
         </div>
     );
 }
